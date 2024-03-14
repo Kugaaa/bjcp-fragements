@@ -1,0 +1,7 @@
+setup.py
+bjcp_fragments_set.egg-info/PKG-INFO
+bjcp_fragments_set.egg-info/SOURCES.txt
+bjcp_fragments_set.egg-info/dependency_links.txt
+bjcp_fragments_set.egg-info/entry_points.txt
+bjcp_fragments_set.egg-info/requires.txt
+bjcp_fragments_set.egg-info/top_level.txt
