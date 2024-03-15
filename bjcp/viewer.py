@@ -1,3 +1,5 @@
+import re
+
 from bjcp.service.service import SubCategory
 from bjcp.service.service import CategoryAbstract
 import click
@@ -58,7 +60,7 @@ def format_handle(content):
 
 
 def show_content(content: str):
-    split_content = split_text(content)
+    split_content = split_highlight_text(content)
     for highlight_word in split_content:
         if highlight_word.is_in_array:
             click.secho(highlight_word.content, fg=highlight_word.ansi, bold=True, nl=False)
@@ -76,11 +78,13 @@ class HighLightWordConfig:
 highlight_word_list = [
     HighLightWordConfig('beers', highlight_color),
     HighLightWordConfig('beer', highlight_color),
-    HighLightWordConfig('malt', highlight_color),
-    HighLightWordConfig('hops', highlight_color),
-    HighLightWordConfig('hop', highlight_color),
-    HighLightWordConfig('yeasts', highlight_color),
-    HighLightWordConfig('yeast', highlight_color),
+    HighLightWordConfig('malts', 220),
+    HighLightWordConfig('malt', 220),
+    HighLightWordConfig('hops', 119),
+    HighLightWordConfig('hop', 119),
+    HighLightWordConfig('yeasts', 230),
+    HighLightWordConfig('yeast', 230),
+    HighLightWordConfig('water', 87),
 
     HighLightWordConfig('og', table_highlight_color),
     HighLightWordConfig('ibus', table_highlight_color),
@@ -97,32 +101,22 @@ class HighlightWord:
         self.ansi = ansi
 
 
-def split_text(text):
+def remove_symbols(string):
+    pattern = r'[^a-zA-Z0-9]'  # 匹配非字母、非数字、非空格的字符
+    return re.sub(pattern, '', string)
+
+
+def split_highlight_text(text: str):
     result = []
-    current_block = ""
-
-    i = 0
-    while i < len(text):
-        found_match = False
-        for highlight_word in highlight_word_list:
-            word = highlight_word.word
-            ansi = highlight_word.ansi
-            if text.startswith(word, i):
-                if current_block:
-                    result.append(HighlightWord(False, current_block, None))
-                result.append(HighlightWord(True, word, ansi))
-                current_block = ""
-                i += len(word)
-                found_match = True
-                break
-
-        if not found_match:
-            current_block += text[i]
-            i += 1
-
-    if current_block:
-        result.append(HighlightWord(False, current_block, None))
-
+    highlight_words_set = {highlight_word.word: highlight_word for highlight_word in highlight_word_list}
+    split_space = re.split(r'(\s)', text)
+    for split in split_space:
+        remove_symbols_spit = remove_symbols(split)
+        if remove_symbols_spit in highlight_words_set:
+            highlight_word_config = highlight_words_set.get(remove_symbols_spit)
+            result.append(HighlightWord(True, highlight_word_config.word, highlight_word_config.ansi))
+        else:
+            result.append(HighlightWord(False, split, None))
     return result
 
 
