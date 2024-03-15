@@ -30,6 +30,12 @@ def show_sub_category_all(sub_category: SubCategory):
     click.secho(sub_category.category.name + " > ", nl=False)
     click.secho("[" + sub_category.id + "] " + sub_category.name, fg=base_fg_color)
 
+    # category notes
+    if sub_category.category.notes:
+        click.echo()
+        click.secho("** Category Notes **", fg=base_fg_color)
+        show_content(sub_category.category.notes)
+
     # sub category
     attributes = vars(sub_category)
     not_none_attributes = {
