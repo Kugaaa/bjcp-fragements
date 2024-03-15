@@ -5,8 +5,12 @@ Command line-based BJCP content learning tool.
 Implemented with Python and Click
 
 ![catalogue.png](img/catalogue.png)
-
+</br>
+</br>
 ![content.png](img/content.png)
+</br>
+</br>
+![content2.png](img/content2.png)
 
 # How To Use
 
@@ -21,6 +25,7 @@ Implemented with Python and Click
 - [ ] More fragmented learning features
 - [x] Display beautification (tables, etc.)
 - [ ] Custom configuration
+- [ ] Flexible keyword highlighting
 
 # Acknowledgements
 

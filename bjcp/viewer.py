@@ -17,6 +17,9 @@ base_fg_color = 226
 # 高亮颜色
 highlight_color = 228
 
+# 表格高亮颜色
+table_highlight_color = 221
+
 
 def show_sub_category_all(sub_category: SubCategory):
     # basic info
@@ -58,19 +61,40 @@ def show_content(content: str):
     split_content = split_text(content)
     for highlight_word in split_content:
         if highlight_word.is_in_array:
-            click.secho(highlight_word.content, fg=highlight_color, bold=True, nl=False)
+            click.secho(highlight_word.content, fg=highlight_word.ansi, bold=True, nl=False)
         else:
             click.echo(highlight_word.content, nl=False)
     click.echo()
 
 
-highlight_word_list = ['beer']
+class HighLightWordConfig:
+    def __init__(self, word, ansi):
+        self.word = word
+        self.ansi = ansi
+
+
+highlight_word_list = [
+    HighLightWordConfig('beers', highlight_color),
+    HighLightWordConfig('beer', highlight_color),
+    HighLightWordConfig('malt', highlight_color),
+    HighLightWordConfig('hops', highlight_color),
+    HighLightWordConfig('hop', highlight_color),
+    HighLightWordConfig('yeasts', highlight_color),
+    HighLightWordConfig('yeast', highlight_color),
+
+    HighLightWordConfig('og', table_highlight_color),
+    HighLightWordConfig('ibus', table_highlight_color),
+    HighLightWordConfig('fg', table_highlight_color),
+    HighLightWordConfig('srm', table_highlight_color),
+    HighLightWordConfig('abv', table_highlight_color),
+]
 
 
 class HighlightWord:
-    def __init__(self, is_in_array, content):
+    def __init__(self, is_in_array, content, ansi):
         self.is_in_array = is_in_array
         self.content = content
+        self.ansi = ansi
 
 
 def split_text(text):
@@ -80,11 +104,13 @@ def split_text(text):
     i = 0
     while i < len(text):
         found_match = False
-        for word in highlight_word_list:
+        for highlight_word in highlight_word_list:
+            word = highlight_word.word
+            ansi = highlight_word.ansi
             if text.startswith(word, i):
                 if current_block:
-                    result.append(HighlightWord(False, current_block))
-                result.append(HighlightWord(True, word))
+                    result.append(HighlightWord(False, current_block, None))
+                result.append(HighlightWord(True, word, ansi))
                 current_block = ""
                 i += len(word)
                 found_match = True
@@ -95,7 +121,7 @@ def split_text(text):
             i += 1
 
     if current_block:
-        result.append(HighlightWord(False, current_block))
+        result.append(HighlightWord(False, current_block, None))
 
     return result
 
