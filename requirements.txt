@@ -1,3 +1,4 @@
 click==8.1.7
+prettytable==3.10.0
 setuptools==63.4.1
-tinydb==4.8.0
+tinydb==4.7.1

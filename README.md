@@ -19,7 +19,7 @@ Implemented with Python and Click
 # TODO
 
 - [ ] More fragmented learning features
-- [ ] Display beautification (tables, etc.)
+- [x] Display beautification (tables, etc.)
 - [ ] Custom configuration
 
 # Acknowledgements

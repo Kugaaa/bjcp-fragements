@@ -1,7 +1,7 @@
 from bjcp.service.service import SubCategory
 from bjcp.service.service import CategoryAbstract
 import click
-import re
+from prettytable import PrettyTable
 
 __sub_category_basic_params = {"id", "name", "category"}
 
@@ -47,9 +47,10 @@ def format_handle(content):
     if isinstance(content, list):
         return '\n'.join('- ' + str(line) for line in content)
     if isinstance(content, dict):
-        return '\n'.join('- ' + key + ': ' + (
-            f"[{value['min']}, {value['max']}]" if isinstance(value, dict) else str(value)) for key, value
-                         in content.items())
+        statistics_tb = PrettyTable(['dimensions', 'min', 'max'])
+        for key, value in content.items():
+            statistics_tb.add_row([str(key), value['min'], value['max']])
+        return statistics_tb.__str__()
     return content
 
 
