@@ -48,15 +48,17 @@ def random_sub_category() -> SubCategory:
 
     # 查询子分类
     sub_category_result = storage.select_sub_category_by_doc_id(random_id)
+    return query_and_build_category(sub_category_result)
+
+
+def query_and_build_category(sub_category_result):
     category_id = sub_category_result['category_id']
     category_result = storage.select_categories_by_id(category_id)
-
     try:
         sub_category = wrap(category_result, sub_category_result)
     except Exception as e:
-        print("wrap error id:", random_id)
+        print("wrap error sub category id: ", sub_category_result['id'])
         raise e
-
     return sub_category
 
 
@@ -124,3 +126,8 @@ def wrap(category_result, sub_category_result):
         sub_category.category.name = sub_category.category.id
     sub_category.category.notes = category_result.get('notes', None)
     return sub_category
+
+
+def get_sub_category_by_id(sub_category_id: str):
+    sub_category_result = storage.select_sub_category_by_id(sub_category_id)
+    return query_and_build_category(sub_category_result)

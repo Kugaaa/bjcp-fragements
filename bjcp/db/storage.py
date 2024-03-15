@@ -41,6 +41,10 @@ def select_sub_category_by_doc_id(doc_id: int):
     return __db_sub_categories.get(doc_id=doc_id)
 
 
+def select_sub_category_by_id(sub_category_id: str):
+    return __db_sub_categories.get(__query.id == sub_category_id)
+
+
 def select_categories_by_id(category_id: str):
     return __db_categories.get(__query.id == category_id)
 

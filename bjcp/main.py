@@ -22,5 +22,13 @@ def random():
     click.echo()
 
 
+@cli.command(name='q', help="query BJCP style by id")
+@click.option('-id', type=str, required=True, help="category or sub category id")
+def query(id: str):
+    info = service.get_sub_category_by_id(id)
+    viewer.show_sub_category_all(info)
+    click.echo()
+
+
 if __name__ == '__main__':
     random()
